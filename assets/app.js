@@ -1,14 +1,13 @@
-
-
 var firebaseConfig = {
-    apiKey: "AIzaSyDwGZnYbAXWvWi2weIh1aUiSkOo1yQ28RQ",
-    authDomain: "choochoo-4eb48.firebaseapp.com",
-    databaseURL: "https://choochoo-4eb48.firebaseio.com",
-    projectId: "choochoo-4eb48",
-    storageBucket: "",
-    messagingSenderId: "18828919141",
-    appId: "1:18828919141:web:3d6d97b1c572046e33e18c"
+  apiKey: "AIzaSyDwGZnYbAXWvWi2weIh1aUiSkOo1yQ28RQ",
+  authDomain: "choochoo-4eb48.firebaseapp.com",
+  databaseURL: "https://choochoo-4eb48.firebaseio.com",
+  projectId: "choochoo-4eb48",
+  storageBucket: "",
+  messagingSenderId: "18828919141",
+  appId: "1:18828919141:web:3d6d97b1c572046e33e18c"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
@@ -24,56 +23,54 @@ var nextArrival = ""; //must be calculated
 
 
 $("#add-train").on("click", function (event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    train = $("#name-input").val().trim();
-    destination = $("#destination-input").val().trim();
-    firstTrain = $("#firsttrain-input").val().trim();
-    frequency= $("#frequency-input").val().trim();
+  train = $("#name-input").val().trim();
+  destination = $("#destination-input").val().trim();
+  firstTrain = $("#firsttrain-input").val().trim();
+  frequency= $("#frequency-input").val().trim();
 
-    database.ref().push({
-        train: train,
-        destination: destination,
-        firstTrain: firstTrain,
-        frequency: frequency,
-    });
+  database.ref().push({
+      train: train,
+      destination: destination,
+      firstTrain: firstTrain,
+      frequency: frequency
+  });
 
-    $("#name-input").val("");
-    $("#destination-input").val("");
-    $("#firsttrain-input").val("");
-    $("#frequency-input").val("");
+  $("#name-input").val("");
+  $("#destination-input").val("");
+  $("#firsttrain-input").val("");
+  $("#frequency-input").val("");
 })
 
 
-// database.ref().on("child_added", function (snapshot) {
+database.ref().on("child_added", function(snapshot) {
+  
+
+
 //     var randomDate = "09/18/2018";
 //     var randomFormat = "MM/DD/YYYY";
 //     var convertedDate = moment(randomDate, randomFormat);
 
-//     // storing the snapshot.val() in a variable for convenience
-//     var sv = snapshot.val();
-
-//     // Console.loging the last user's data
-//     console.log(sv.employeeName);
-//     console.log(sv.personRole);
-//     console.log(sv.start);
-//     console.log(sv.monthlyRate);
-
-    // var monthsWorked = (moment.diff(moment(), "months");
-    // var totalBilled = (monthsWorked) * (sv.monthlyRate);
+    // storing the snapshot.val() in a variable for convenience
+    var sv = snapshot.val();
 
 
+  // var monthsWorked = (moment.diff(moment(), "months");
+  // var totalBilled = (monthsWorked) * (sv.monthlyRate);
 
+  var newRow = $("<tr>").append(
+    $("<td>").text(sv.train),
+    $("<td>").text(sv.destination),
+    $("<td>").text(sv.firstTrain),
+    $("<td>").text(sv.frequency),
+  );
 
-//     // Change the HTML to reflect
-//     $("#emplyee-name").text(sv.employeeName);
-//     $("#role").text(sv.personRole);
-//     $("#start-date").text(sv.start);
-//     $("#monthly-rate").text(sv.monthlyRate);
-//     $("#months-worked").text(monthsWorked);
-//     $("#total-billed").text(totalBilled);
+  // Append the new row to the table
+  $("#train-table > tbody").append(newRow);
+}
 
-//     // Handle the errors
-// }, function (errorObject) {
-//     console.log("Errors handled: " + errorObject.code);
-// })
+    // Handle the errors
+ ,function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+});
