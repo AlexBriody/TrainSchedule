@@ -16,8 +16,8 @@ var database = firebase.database();
 
 var train = "";
 var destination = "";
-var firstTrain = "";
 var frequency = "";
+var militaryTime = "";
 var minutesAway = 0; //must be calculated
 var nextArrival = ""; //must be calculated
 
@@ -27,14 +27,18 @@ $("#add-train").on("click", function (event) {
 
   train = $("#name-input").val().trim();
   destination = $("#destination-input").val().trim();
-  firstTrain = $("#firsttrain-input").val().trim();
-  frequency= $("#frequency-input").val().trim();
+  militaryTime = $("#firsttrain-input").val().trim();
+  frequency = $("#frequency-input").val().trim();
+
+  var nextArrival = moment(militaryTime, "hmm").format("hh:mmA");
+
+  console.log(nextArrival)
 
   database.ref().push({
-      train: train,
-      destination: destination,
-      firstTrain: firstTrain,
-      frequency: frequency
+    train: train,
+    destination: destination,
+    nextArrival: nextArrival,
+    frequency: frequency
   });
 
   $("#name-input").val("");
@@ -44,16 +48,10 @@ $("#add-train").on("click", function (event) {
 })
 
 
-database.ref().on("child_added", function(snapshot) {
-  
+database.ref().on("child_added", function (snapshot) {
 
-
-//     var randomDate = "09/18/2018";
-//     var randomFormat = "MM/DD/YYYY";
-//     var convertedDate = moment(randomDate, randomFormat);
-
-    // storing the snapshot.val() in a variable for convenience
-    var sv = snapshot.val();
+  // storing the snapshot.val() in a variable for convenience
+  var sv = snapshot.val();
 
 
   // var monthsWorked = (moment.diff(moment(), "months");
@@ -62,7 +60,7 @@ database.ref().on("child_added", function(snapshot) {
   var newRow = $("<tr>").append(
     $("<td>").text(sv.train),
     $("<td>").text(sv.destination),
-    $("<td>").text(sv.firstTrain),
+    $("<td>").text(sv.nextArrival),
     $("<td>").text(sv.frequency),
   );
 
@@ -70,7 +68,7 @@ database.ref().on("child_added", function(snapshot) {
   $("#train-table > tbody").append(newRow);
 }
 
-    // Handle the errors
- ,function (errorObject) {
+  // Handle the errors
+  , function (errorObject) {
     console.log("Errors handled: " + errorObject.code);
-});
+  });
