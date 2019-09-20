@@ -30,15 +30,16 @@ $("#add-train").on("click", function (event) {
   militaryTime = $("#firsttrain-input").val().trim();
   frequency = $("#frequency-input").val().trim();
 
-  var nextArrival = moment(militaryTime, "hmm").format("hh:mmA");
+  nextArrival = moment(militaryTime, "hmm").format("hh:mmA");
 
-  console.log(nextArrival)
+  hoursMinutesAway = moment(militaryTime, "hmm").fromNow("mm");
 
   database.ref().push({
     train: train,
     destination: destination,
     nextArrival: nextArrival,
-    frequency: frequency
+    frequency: frequency,
+    hoursMinutesAway: hoursMinutesAway
   });
 
   $("#name-input").val("");
@@ -60,8 +61,9 @@ database.ref().on("child_added", function (snapshot) {
   var newRow = $("<tr>").append(
     $("<td>").text(sv.train),
     $("<td>").text(sv.destination),
-    $("<td>").text(sv.nextArrival),
     $("<td>").text(sv.frequency),
+    $("<td>").text(sv.nextArrival),
+    $("<td>").text(sv.hoursMinutesAway),
   );
 
   // Append the new row to the table
